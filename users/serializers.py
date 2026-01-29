@@ -7,20 +7,20 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password']
-        read_only_fields = ['id']
+        fields = ["id", "username", "email", "password"]
+        read_only_fields = ["id"]
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
 
     def update(self, instance, validated_data):
-        if 'password' in validated_data:
-            password = validated_data.pop('password')
+        if "password" in validated_data:
+            password = validated_data.pop("password")
             instance.set_password(password)
-        
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        
+
         instance.save()
         return instance
 
@@ -30,7 +30,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ["username", "email", "password"]
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)

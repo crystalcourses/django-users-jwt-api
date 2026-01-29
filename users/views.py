@@ -15,7 +15,7 @@ class UserListView(APIView):
         cached = UserCacheService.get_users_list()
         if cached:
             return Response(cached)
-        
+
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         UserCacheService.set_users_list(serializer.data)
@@ -43,11 +43,11 @@ class UserDetailView(APIView):
         cached = UserCacheService.get_user(pk)
         if cached:
             return Response(cached)
-        
+
         user = self.get_object(pk)
         if not user:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
         serializer = UserSerializer(user)
         UserCacheService.set_user(pk, serializer.data)
         return Response(serializer.data)
@@ -57,7 +57,7 @@ class UserDetailView(APIView):
         user = self.get_object(pk)
         if not user:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
         serializer = UserSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -70,7 +70,7 @@ class UserDetailView(APIView):
         user = self.get_object(pk)
         if not user:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -78,12 +78,12 @@ class UserDetailView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(responses={204: 'No Content'})
+    @swagger_auto_schema(responses={204: "No Content"})
     def delete(self, request, pk):
         user = self.get_object(pk)
         if not user:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
         user.delete()
         UserCacheService.invalidate_user(pk)
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -92,7 +92,9 @@ class UserDetailView(APIView):
 class RegisterView(APIView):
     permission_classes = [AllowAny]
 
-    @swagger_auto_schema(request_body=RegisterSerializer, responses={201: UserSerializer})
+    @swagger_auto_schema(
+        request_body=RegisterSerializer, responses={201: UserSerializer}
+    )
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():

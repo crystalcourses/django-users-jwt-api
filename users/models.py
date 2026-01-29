@@ -5,10 +5,10 @@ from django.db import models
 class UserManager(BaseUserManager):
     def create_user(self, username, email, password=None):
         if not username:
-            raise ValueError('Username is required')
+            raise ValueError("Username is required")
         if not email:
-            raise ValueError('Email is required')
-        
+            raise ValueError("Email is required")
+
         user = self.model(
             username=username,
             email=self.normalize_email(email),
@@ -32,11 +32,11 @@ class User(AbstractBaseUser):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
 
     class Meta:
-        db_table = 'users'
+        db_table = "users"
 
     def __str__(self):
         return self.username
